@@ -27,6 +27,17 @@ public static class PlanCatalog
         ff("ios", "Painel iOS");
         ff("pc", "Painel PC");
 
+        void ff1real(string platform, string productTitle)
+        {
+            Add(d, $"ff-1real-{platform}-7", $"{productTitle} — 7 dias", 1m);
+            Add(d, $"ff-1real-{platform}-30", $"{productTitle} — 30 dias", 1m);
+            Add(d, $"ff-1real-{platform}-90", $"{productTitle} — 3 meses", 1m);
+        }
+
+        ff1real("android", "Apk Android Painel");
+        ff1real("ios", "Painel iOS");
+        ff1real("pc", "Painel PC");
+
         void val(string prefix, string productTitle)
         {
             Add(d, $"{prefix}-7", $"{productTitle} — 7 dias", 50);
