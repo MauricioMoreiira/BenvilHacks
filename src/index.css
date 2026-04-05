@@ -1,0 +1,54 @@
+:root {
+  --bg: #030008;
+  --bg-elevated: #0c0614;
+  --purple: #a020f0;
+  --purple-dim: #6b21a8;
+  --magenta: #e879f9;
+  --cyan: #22d3ee;
+  --text: #e9d5ff;
+  --text-muted: #a78bfa99;
+  --border: rgba(160, 32, 240, 0.35);
+  --glow: 0 0 24px rgba(160, 32, 240, 0.45);
+  --font-display: 'Orbitron', system-ui, sans-serif;
+  --font-body: 'Rajdhani', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
