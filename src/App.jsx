@@ -7,6 +7,7 @@ import {
   BRAWLSTARS_PLANS_BY_PLATFORM,
   BRAWLSTARS_PLATFORMS,
   CLASHROYALE_PLANS,
+  FREEFIRE_PLANS_1REAL_BY_PLATFORM,
   FREEFIRE_PLANS_BY_PLATFORM,
   FREEFIRE_PLATFORMS,
   GAMES,
@@ -108,6 +109,9 @@ function maskCpfDisplay(raw) {
 }
 
 export default function App() {
+  const [pathname, setPathname] = useState(() =>
+    typeof window !== 'undefined' ? window.location.pathname : '/',
+  )
   const [modalGameId, setModalGameId] = useState(null)
   const [planId, setPlanId] = useState(PLANS[1].id)
   const [freeFirePlatform, setFreeFirePlatform] = useState(null)
@@ -169,13 +173,28 @@ export default function App() {
     setModalGameId(gameId)
   }
 
+  const normalizedPath = (pathname.replace(/\/$/, '') || '/')
+  const isTestOneRealRoute = normalizedPath === '/teste/tudo1real'
+
   const closeModal = useCallback(() => {
+    if (isTestOneRealRoute) {
+      window.history.pushState({}, '', '/')
+      setPathname('/')
+      resetCheckoutFlow()
+      setFreeFirePlatform(null)
+      lastFocusRef.current?.focus?.()
+      return
+    }
     setModalGameId(null)
     resetCheckoutFlow()
     lastFocusRef.current?.focus?.()
-  }, [resetCheckoutFlow])
+  }, [resetCheckoutFlow, isTestOneRealRoute])
 
-  const game = modalGameId ? GAMES.find((g) => g.id === modalGameId) : null
+  const game = isTestOneRealRoute
+    ? (GAMES.find((g) => g.id === 'freefire') ?? null)
+    : modalGameId
+      ? GAMES.find((g) => g.id === modalGameId)
+      : null
   const isFreeFire = game?.id === 'freefire'
   const isValorant = game?.id === 'valorant'
   const isAimbotPainelGame = !!(game && AIMBOT_PAINEL_GAME_IDS.includes(game.id))
@@ -183,8 +202,9 @@ export default function App() {
   const isRoblox = game?.id === 'roblox'
   const isPokemonGo = game?.id === 'pokemongo'
   const isClashRoyale = game?.id === 'clashroyale'
+  const freeFirePlansSource = isTestOneRealRoute ? FREEFIRE_PLANS_1REAL_BY_PLATFORM : FREEFIRE_PLANS_BY_PLATFORM
   const freeFirePlans =
-    freeFirePlatform && isFreeFire ? FREEFIRE_PLANS_BY_PLATFORM[freeFirePlatform] : null
+    freeFirePlatform && isFreeFire ? freeFirePlansSource[freeFirePlatform] : null
   const valorantPlans =
     valorantMode && isValorant ? VALORANT_PLANS_BY_MODE[valorantMode] : null
   const aimPainelPlans =
@@ -215,7 +235,7 @@ export default function App() {
     catalogPlans.find((p) => p.id === planId) ?? catalogPlans[0] ?? PLANS[0]
 
   const selectFreeFirePlatform = (platformId) => {
-    const list = FREEFIRE_PLANS_BY_PLATFORM[platformId]
+    const list = freeFirePlansSource[platformId]
     setFreeFirePlatform(platformId)
     setPlanId(list[0].id)
   }
@@ -284,7 +304,13 @@ export default function App() {
   const checkoutSubflow = Boolean(showCheckoutForm || checkoutSession || checkoutPaid)
 
   useEffect(() => {
-    if (!modalGameId) return
+    const onPop = () => setPathname(window.location.pathname)
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
+  useEffect(() => {
+    if (!modalGameId && !isTestOneRealRoute) return
     const onKey = (e) => {
       if (e.key === 'Escape') closeModal()
     }
@@ -294,18 +320,18 @@ export default function App() {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-  }, [modalGameId, closeModal])
+  }, [modalGameId, isTestOneRealRoute, closeModal])
 
   useEffect(() => {
-    if (modalGameId && modalRef.current) {
+    if ((modalGameId || isTestOneRealRoute) && modalRef.current) {
       const closeBtn = modalRef.current.querySelector('.modal__close')
       closeBtn?.focus()
     }
-  }, [modalGameId])
+  }, [modalGameId, isTestOneRealRoute])
 
   useEffect(() => {
     modalRef.current?.scrollTo?.(0, 0)
-  }, [modalGameId, showCheckoutForm, checkoutSession, checkoutPaid])
+  }, [modalGameId, isTestOneRealRoute, showCheckoutForm, checkoutSession, checkoutPaid])
 
   useEffect(() => {
     const v = verifyPaymentRef.current
@@ -478,6 +504,8 @@ export default function App() {
     <div className="page">
       <div className="grid-bg" aria-hidden="true" />
 
+      {!isTestOneRealRoute ? (
+        <>
       <header className="header">
         <a href="#top" className="brand">
           <img src={LOGO_SRC} alt="Benvil Hacks" className="brand__logo" width={48} height={48} />
@@ -601,8 +629,11 @@ export default function App() {
           <span className="footer__note">Eleve seu nível com segurança.</span>
         </div>
       </footer>
+        </>
+      ) : null}
 
-      {game &&
+      {(modalGameId || isTestOneRealRoute) &&
+        game &&
         createPortal(
           <div
             className="modal-root"
@@ -624,6 +655,13 @@ export default function App() {
                   <p className="modal__tag">{game.tag}</p>
                 </div>
               </div>
+
+              {isTestOneRealRoute ? (
+                <p className="modal__test-banner" role="note">
+                  Modo teste: cada opção gera um PIX de <strong>R$ 1,00</strong> — mesmo fluxo e regras do checkout
+                  principal (ideal para testar várias vezes com custo baixo).
+                </p>
+              ) : null}
 
               {!showPlanCheckout ? (
                 <>

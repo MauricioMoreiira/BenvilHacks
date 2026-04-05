@@ -29,6 +29,29 @@ export const FREEFIRE_PLANS_BY_PLATFORM = {
   pc: freefirePlansForPlatform('ff-pc', 'Painel PC'),
 }
 
+function freefirePlansForPlatform1Real(prefix, productTitle) {
+  const durations = [
+    { suffix: '7', label: '7 dias', price: 1 },
+    { suffix: '30', label: '30 dias', price: 1 },
+    { suffix: '90', label: '3 meses', price: 1 },
+  ]
+  return durations.map(({ suffix, label, price }) => ({
+    id: `${prefix}-${suffix}`,
+    name: `${productTitle} — ${label}`,
+    price,
+    periodLabel: label,
+    blurb: `Acesso ao painel por ${label}.`,
+    perks: FREEFIRE_SHARED_PERKS,
+  }))
+}
+
+/** Mesmo fluxo Free Fire; R$ 1,00 por plano (testes baratos). IDs alinhados ao PlanCatalog (ff-1real-*). */
+export const FREEFIRE_PLANS_1REAL_BY_PLATFORM = {
+  android: freefirePlansForPlatform1Real('ff-1real-android', 'Apk Android Painel'),
+  ios: freefirePlansForPlatform1Real('ff-1real-ios', 'Painel iOS'),
+  pc: freefirePlansForPlatform1Real('ff-1real-pc', 'Painel PC'),
+}
+
 export const FREEFIRE_PLATFORMS = [
   { id: 'android', label: 'Android' },
   { id: 'ios', label: 'iOS' },

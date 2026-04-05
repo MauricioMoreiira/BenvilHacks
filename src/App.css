@@ -668,6 +668,21 @@
   border-color: var(--magenta);
 }
 
+.modal__test-banner {
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #fde68a;
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  border-radius: 10px;
+}
+
+.modal__test-banner strong {
+  color: #fef3c7;
+}
+
 .modal__hero {
   display: flex;
   gap: 1rem;
