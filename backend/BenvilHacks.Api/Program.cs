@@ -25,6 +25,7 @@ builder.Services.AddCors(o =>
             "http://127.0.0.1:5174",
             "http://localhost:4173",
             "http://127.0.0.1:4173",
+            "https://benvil-hacks.vercel.app",
         };
         var extra = builder.Configuration["Cors:Origins"];
         if (!string.IsNullOrWhiteSpace(extra))

@@ -458,8 +458,9 @@ export default function App() {
         )
         let errMsg = data?.error?.trim() || 'Não foi possível iniciar o checkout.'
         if (res.status === 404 && !data?.error) {
-          errMsg =
-            'API não encontrada (404). O Vite só encaminha /api no dev/preview com proxy; suba a API em http://localhost:5261 e reinicie o front (npm run dev ou npm run preview).'
+          errMsg = import.meta.env.PROD
+            ? 'API não encontrada (404). No Vercel, defina VITE_API_URL com a URL pública da API (https://…, sem barra no fim) e redeploy; na API, inclua https://benvil-hacks.vercel.app no CORS.'
+            : 'API não encontrada (404). O Vite só encaminha /api no dev/preview com proxy; suba a API em http://localhost:5261 e reinicie o front (npm run dev ou npm run preview).'
         }
         const det = typeof data?.details === 'string' ? data.details.trim() : ''
         setCheckoutError(det ? `${errMsg}\n\n${det}` : errMsg)

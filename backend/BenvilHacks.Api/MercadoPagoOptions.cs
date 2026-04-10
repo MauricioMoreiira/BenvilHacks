@@ -43,6 +43,6 @@ public sealed class FrontendOptions
 {
     public const string SectionName = "Frontend";
 
-    /// <summary>URL base do site (ex.: https://seudominio.com ou http://localhost:5173)</summary>
+    /// <summary>URL base do site (ex.: https://benvil-hacks.vercel.app ou http://localhost:5173).</summary>
     public string BaseUrl { get; set; } = "http://localhost:5173";
 }
