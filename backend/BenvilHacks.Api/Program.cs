@@ -129,9 +129,8 @@ app.MapPost("/api/checkout/session", (
         {
             error = "Mercado Pago: faltam Public Key e/ou Access Token na API.",
             details =
-                "1) Copie backend/BenvilHacks.Api/appsettings.MercadoPago.local.json.example para appsettings.MercadoPago.local.json (mesma pasta) e preencha MercadoPago:PublicKey e MercadoPago:AccessToken com o par da mesma aplicação no painel (Suas integrações). " +
-                "2) Ou defina variáveis de ambiente MercadoPago__PublicKey e MercadoPago__AccessToken antes de dotnet run. " +
-                "O arquivo .local.json não vai para o Git (está no .gitignore). Reinicie a API após salvar.",
+                "1) Preencha MercadoPago:PublicKey e MercadoPago:AccessToken em appsettings.json ou appsettings.MercadoPago.local.json (pasta da API), com o par da mesma aplicação no painel (Suas integrações). " +
+                "2) Ou defina variáveis de ambiente MercadoPago__PublicKey e MercadoPago__AccessToken. Reinicie a API após salvar.",
             missingPublicKey = string.IsNullOrWhiteSpace(pk),
             missingAccessToken = string.IsNullOrWhiteSpace(at),
         });

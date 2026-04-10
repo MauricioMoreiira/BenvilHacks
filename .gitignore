@@ -28,4 +28,3 @@ backend/**/bin/
 backend/**/obj/
 backend/**/*.user
 backend/**/Data/pending-orders/
-**/appsettings.MercadoPago.local.json
